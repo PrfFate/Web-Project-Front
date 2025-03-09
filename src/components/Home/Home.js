@@ -38,7 +38,7 @@ function Home() {
                         <Grid container spacing={3}>
                             {postList.map((post, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <Post title={post.title} text={post.text} />
+                                    <Post userId={post.userId} userName={post.userName} title={post.title} text={post.text} />
                                 </Grid>
                             ))}
                         </Grid>

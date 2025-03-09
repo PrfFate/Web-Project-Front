@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "./Post.scss";
+import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -13,7 +14,6 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 
-// ExpandMore bileşenini güncellendi: transform özelliği kaldırıldı
 const ExpandMore = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== "expand",
 })(({ theme }) => ({
@@ -23,20 +23,27 @@ const ExpandMore = styled(IconButton, {
   }),
 }));
 
-function Post({ title, text }) {
+function Post({ title, text, userId, userName }) {
   const [expanded, setExpanded] = useState(false);
+  const [liked, setLiked] = useState(false); // Kalp durumu
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleLikeClick = () => {
+    setLiked(!liked); // Kalp tıklanınca durum değiştir
   };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
+          <Link to={`/users/${userId}`} style={{ textDecoration: "none" }}>
+            <Avatar sx={{ bgcolor: red[500], cursor: "pointer" }} aria-label="recipe">
+              {userName ? userName.charAt(0).toUpperCase() : "?"}
+            </Avatar>
+          </Link>
         }
         title={title}
         sx={{ textAlign: "center" }}
@@ -49,8 +56,8 @@ function Post({ title, text }) {
       </CardContent>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
+          <FavoriteIcon sx={{ color: liked ? "red" : "gray" }} /> {/* Kalp rengi */}
         </IconButton>
         <ExpandMore
           onClick={handleExpandClick}
